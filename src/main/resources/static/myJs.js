@@ -1,68 +1,88 @@
 
+const IMAGE_TIME = 10000;
+const FADE_TIME = 2000;
 
+$(document).ready(start);
 
-var lastTime;
-var img;
-var images;
-
-$(document).ready(function() {
-    img = document.getElementById("img");
-    var container = $("#images")
-    img.style.maxWidth = container.innerWidth() + 'px';
-    img.style.maxHeight = container.innerHeight() + 'px';
-    lastTime = new Date().getTime();
-    start()
-
-    $(img)
-        .on('load', function(){
-            setTimeout(click, 8000)
-        })
-        .on('error', function() {
-            console.log("Error loading image " + img.src);
-            click()
-        });
-});
-
-var click = function() {
-    if (images.length == 0) {
-        start();
-    } else {
-        var src = images.pop();
-        if (src == null) {
-            click();
-        } else {
-            var newTime = new Date().getTime();
-            console.log("Loading new image " + src + " after " + (newTime - lastTime) + " ms");
-            lastTime = newTime
-            img.src = src;
-        }
-    }
-};
-
-var show = function(newImages) {
-    if (newImages.length == 0) {
-        console.log("Obtained empty list of next images");
-        setTimeout(start, 10000);
-    } else {
-        images = newImages;
-        click();
-    }
-};
-
+var urls;
 
 function start() {
-    $.ajax({
-  		url: '/images/next',
-  		dataType: "json"
-	})
-    .done(function( data ) {
-    	show(data);
-  	})
-  	.fail(function(e) {
-  	    console.log(e)
-  	    start();
-  	})
+    loadNextImage(function(image) {
+        appendImage(image);
+        advance();
+    });
 }
 
+function advance() {
+    loadNextImage(function (next) {
+        appendImage(next);
+        setTimeout(function () {
+            transitionImages(function () {
+                advance();
+            });
+        }, IMAGE_TIME)
+    });
+}
 
+function loadUrls(callback) {
+    $.ajax({
+        url: '/images/next',
+        dataType: "json"
+    })
+        .done(function (data) {
+            urls = data;
+            console.log("Loaded urls: " + urls.join(" "));
+            callback(data);
+        })
+        .fail(function (e) {
+            console.log("Failed to load urls, retrying: " + e);
+            loadUrls(callback);
+        });
+}
 
+function loadNextImage(callback) {
+    if (urls && urls.length) {
+        var url = urls.pop();
+        loadImage(url,
+            function(image) {
+                callback(image);
+            },
+            function(error) {
+                loadNextImage(callback);
+            });
+    } else {
+        loadUrls(function(urls) {
+            loadNextImage(callback);
+        });
+    }
+}
+
+function loadImage(url, success, failure) {
+    var image = new Image();
+    image.onload = function() {
+        console.log("Loaded image: " + url);
+        success(image);
+    };
+    image.onerror = function() {
+        console.log("Error while loading image: " + url);
+        failure();
+    };
+    image.src = url;
+}
+
+function transitionImages(callback) {
+    console.log("Transitioning images");
+    var $first = $('#images > div:first');
+    $first
+        .fadeOut(FADE_TIME)
+        .next()
+        .fadeIn(FADE_TIME, function() {
+            $first.remove();
+            callback();
+        });
+}
+
+function appendImage(image) {
+    var $img = $('<div><img src="' + image.src + '"></img></div>');
+    $("#images").append($img);
+}

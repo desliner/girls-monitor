@@ -1,17 +1,18 @@
 <html>
 <head>
     <title>BLA!</title>
-    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="myJs.js"></script>
     <link href="myCss.css" rel="stylesheet">
 </head>
 <body>
-<div id='images' class="container container-fill">
-    <img id = 'img' style='max-width: 100px; max-height: 100px;'/>
+<div class="container container-fill">
+    <div id="images"></div>
 </div>
-     <div class="container container-temp row-fill">
-         <img src="resource/temp.png" id="reloader" onload="setTimeout('document.getElementById(\'reloader\').src=\'resource/temp.png?v=\'+new Date().getMilliseconds()', 5000)" >
-     </div>
+
+<div class="container container-temp row-fill">
+ <img src="resource/temp.png" id="reloader" onload="setTimeout('document.getElementById(\'reloader\').src=\'resource/temp.png?v=\'+new Date().getMilliseconds()', 5000)" >
+</div>
 
 </body>
 </html>
