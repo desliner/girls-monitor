@@ -1,6 +1,7 @@
 
 const IMAGE_TIME = 10000;
 const FADE_TIME = 2000;
+const LOAD_TIMEOUT = 10000;
 
 $(document).ready(start);
 
@@ -59,15 +60,24 @@ function loadNextImage(callback) {
 
 function loadImage(url, success, failure) {
     var image = new Image();
+    var complete = false;
     image.onload = function() {
+        complete = true;
         console.log("Loaded image: " + url);
         success(image);
     };
     image.onerror = function() {
+        complete = true;
         console.log("Error while loading image: " + url);
         failure();
     };
     image.src = url;
+    setTimeout(function() {
+        if (!complete) {
+            console.log("Timeout while loading image: " + url);
+            failure();
+        }
+    }, LOAD_TIMEOUT);
 }
 
 function transitionImages(callback) {
