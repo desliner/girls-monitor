@@ -1,4 +1,3 @@
-
 const IMAGE_TIME = 10000;
 const FADE_TIME = 2000;
 const LOAD_TIMEOUT = 20000;
@@ -8,7 +7,7 @@ $(document).ready(start);
 var urls;
 
 function start() {
-    loadNextImage(function(image) {
+    loadNextImage(function (image) {
         appendImage(image);
         advance();
     });
@@ -45,14 +44,14 @@ function loadNextImage(callback) {
     if (urls && urls.length) {
         var url = urls.pop();
         loadImage(url,
-            function(image) {
+            function (image) {
                 callback(image);
             },
-            function(error) {
+            function (error) {
                 loadNextImage(callback);
             });
     } else {
-        loadUrls(function(urls) {
+        loadUrls(function (urls) {
             loadNextImage(callback);
         });
     }
@@ -61,14 +60,14 @@ function loadNextImage(callback) {
 function loadImage(url, success, failure) {
     var image = new Image();
     var complete = false;
-    image.onload = function() {
+    image.onload = function () {
         if (!complete) {
             complete = true;
             console.log("Loaded image: " + url);
             success(image);
         }
     };
-    image.onerror = function() {
+    image.onerror = function () {
         if (!complete) {
             complete = true;
             console.log("Error while loading image: " + url);
@@ -76,7 +75,7 @@ function loadImage(url, success, failure) {
         }
     };
     image.src = url;
-    setTimeout(function() {
+    setTimeout(function () {
         if (!complete) {
             complete = true;
             console.log("Timeout while loading image: " + url);
@@ -91,7 +90,7 @@ function transitionImages(callback) {
     $first
         .fadeOut(FADE_TIME)
         .next()
-        .fadeIn(FADE_TIME, function() {
+        .fadeIn(FADE_TIME, function () {
             $first.remove();
             callback();
         });

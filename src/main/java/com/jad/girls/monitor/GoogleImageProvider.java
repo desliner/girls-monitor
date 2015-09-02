@@ -24,19 +24,19 @@ import java.util.*;
 public class GoogleImageProvider implements ImageProvider {
 
     private static final List<Integer> OFFSETS = ImmutableList.of(
-            0, 8, 16, 24, 32, 40, 48, 56
+        0, 8, 16, 24, 32, 40, 48, 56
     );
 
     private static final int PER_PAGE = 8;
 
     private static final List<String> MANDATORY_KEYWORDS = Arrays.asList(
-            "sexy", "hot"
+        "sexy", "hot"
     );
 
     private static final Map<String, List<String>> CLASSIFIERS = Collections.emptyMap();
 
     private static final List<String> DIVERSITY_KEYWORDS = Arrays.asList(
-            "asian", "car", "school", "beach", "bike", "swimsuite", "glasses", "tatoo"
+        "asian", "car", "school", "beach", "bike", "swimsuite", "glasses", "tatoo"
     );
     private static final int DIVERSITY_KEYWORDS_MIN = 0;
     private static final int DIVERSITY_KEYWORDS_MAX = 1;
@@ -95,7 +95,7 @@ public class GoogleImageProvider implements ImageProvider {
         String query = StringUtils.join(keywords, " ");
         query = URLEncoder.encode(query, "UTF-8");
         return String.format("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=off&imgsz=xxlarge&start=%d&rsz=%d&q=%s&nonce=%s",
-                offset, PER_PAGE, query, UUID.randomUUID().toString());
+            offset, PER_PAGE, query, UUID.randomUUID().toString());
     }
 
     private <T> T randomItem(List<T> input) {

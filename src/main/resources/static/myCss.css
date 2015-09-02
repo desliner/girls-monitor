@@ -43,6 +43,7 @@ body {
     /*margin-left: 10px;*/
     width: 100%;
 }
+
 .row-fill {
     min-height: 20%;
     height: 20%;
@@ -56,6 +57,7 @@ h2 {
     border-radius: 15px;
     border: 1px black solid;
 }
+
 .container.container-fill img {
     display: block;
     margin: auto;
