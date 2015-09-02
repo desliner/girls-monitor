@@ -7,6 +7,8 @@ branches:
 before_install:
   - .scripts/update-version.sh
 
+install: mvn install -DskipTests=true
+
 after_success:
   - .scripts/add-git-tag.sh
 
