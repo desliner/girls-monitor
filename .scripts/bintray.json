@@ -38,7 +38,8 @@
 
   "files":
   [
-    {"includePattern": "target/(.*\.jar)", "uploadPattern": "com/jad/girls-monitor/__VERSION__/$1"}
+    {"includePattern": "target/(.*\.jar)", "uploadPattern": "com/jad/girls-monitor/__VERSION__/$1"},
+    {"includePattern": "pom.xml", "uploadPattern": "com/jad/girls-monitor/__VERSION__/girls-monitor-__VERSION__.pom"}
   ],
   "publish": true
 }
