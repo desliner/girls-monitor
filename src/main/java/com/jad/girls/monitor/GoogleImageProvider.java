@@ -1,7 +1,6 @@
-package com.jad.images;
+package com.jad.girls.monitor;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.json.JSONArray;
