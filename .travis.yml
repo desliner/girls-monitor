@@ -1,6 +1,6 @@
 language: java
 
-before_script:
+before_install:
   - .scripts/update-version.sh
 after_success:
   - .scripts/add-git-tag.sh
