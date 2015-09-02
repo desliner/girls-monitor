@@ -38,7 +38,7 @@
 
   "files":
   [
-    {"includePattern": "target/(.*\.jar)", "uploadPattern": "$1"}
+    {"includePattern": "target/(.*\.jar)", "uploadPattern": "com/jad/girls-monitor/__VERSION__/$1"}
   ],
   "publish": true
 }

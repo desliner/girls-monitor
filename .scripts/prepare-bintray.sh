@@ -10,3 +10,5 @@ echo "Setting date to $DATE"
 echo "Setting description to \"$DESCRIPTION\""
 
 sed -i.bak -e "s/__VERSION__/$VERSION/g" -e "s/__DATE__/$DATE/g" -e "s/__DESCRIPTION__/$DESCRIPTION/g" .scripts/bintray.json
+
+ls -la target
