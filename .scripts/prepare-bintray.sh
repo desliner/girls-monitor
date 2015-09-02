@@ -3,8 +3,7 @@
 export VERSION=$(ruby -r rexml/document -e 'puts REXML::Document.new(File.new(ARGV.shift)).elements["/project/version"].text' pom.xml)
 export DATE=$(date +"%Y-%m-%d")
 export DESCRIPTION=$(git log --oneline -n1)
-export DESCRIPTION=$(echo $DESCRIPTION | sed -e 's/[^ ]* //')
-export DESCRIPTION=$(echo $DESCRIPTION | python -c 'import json,sys; print json.dumps(sys.stdin.read()[:-1][0:50])[1:-1]')
+export DESCRIPTION=$(echo $DESCRIPTION | python -c 'import json,sys,re; print json.dumps(re.sub(r"^\w+ ","",sys.stdin.read()[:-1])[0:50])[1:-1]')
 
 echo "Setting version to $VERSION"
 echo "Setting date to $DATE"
