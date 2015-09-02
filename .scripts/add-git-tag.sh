@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env sh -vx
 
 git config --global user.email "builds@travis-ci.com"
 git config --global user.name "Travis CI"
