@@ -1,1 +1,11 @@
 language: java
+
+before_script:
+  - export CURRENT_VERSION=$(mvn3 org.apache.maven.plugins:maven-help-plugin:2.2:evaluate -Dexpression=project.version | grep -v '\[')
+  - export NEW_VERSION=$(echo $CURRENT_VERSION | sed -e "s/-SNAPSHOT/.$TRAVIS_BUILD_NUMBER/g")
+  - mvn versions:set -DnewVersion=$NEW_VERSION
+after_success:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - git tag $NEW_VERSION -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+  - git push -q https://$TAGPERM@github.com/mmyslyvtsev/girls-monitor --tags

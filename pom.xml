@@ -55,6 +55,13 @@
     </dependency>
   </dependencies>
 
+  <scm>
+    <connection>scm:git:https://github.com/mmyslyvtsev/girls-monitor.git</connection>
+    <developerConnection>scm:git:git@github.com:mmyslyvtsev/girls-monitor.git</developerConnection>
+    <url>https://github.com/mmyslyvtsev/girls-monitor</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <build>
     <plugins>
       <plugin>
