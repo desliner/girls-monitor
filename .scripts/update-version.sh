@@ -1,5 +1,5 @@
-#!/usr/bin/env sh -vx
+#!/usr/bin/env sh
 
-export CURRENT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.2:evaluate -Dexpression=project.version | grep -v '\[')
+export CURRENT_VERSION=$(ruby -r rexml/document -e 'puts REXML::Document.new(File.new(ARGV.shift)).elements["/project/version"].text' pom.xml)
 export NEW_VERSION=$(echo $CURRENT_VERSION | sed -e "s/-SNAPSHOT/.$TRAVIS_BUILD_NUMBER/g")
 mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
