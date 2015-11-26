@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -29,29 +30,27 @@ public class GoogleImageProvider implements ImageProvider {
 
     private static final int PER_PAGE = 8;
 
-    private static final List<String> MANDATORY_KEYWORDS = Arrays.asList(
-        "sexy", "hot"
-    );
-
     private static final Map<String, List<String>> CLASSIFIERS = Collections.emptyMap();
 
-    private static final List<String> DIVERSITY_KEYWORDS = Arrays.asList(
-        "asian", "car", "school", "beach", "bike", "swimsuite", "glasses", "tatoo"
-    );
     private static final int DIVERSITY_KEYWORDS_MIN = 0;
     private static final int DIVERSITY_KEYWORDS_MAX = 1;
-
     private static final String KEYWORD_SUFFIX = "girls wallpaper";
-
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+
     private final Random random = new Random();
+
+    @Value("#{'${application.search.mandatory.keywords}'.split(',')}")
+    private List<String> mandatoryKeywords;
+
+    @Value("#{'${application.search.diversity.keywords}'.split(',')}")
+    private List<String> diversityKeywords;
 
 
     @PostConstruct
     public void init() {
-        long pages = OFFSETS.size() * MANDATORY_KEYWORDS.size();
+        long pages = OFFSETS.size() * mandatoryKeywords.size();
 
         for (List<String> classifierKeywords : CLASSIFIERS.values()) {
             pages *= classifierKeywords.size() + 1;
@@ -59,7 +58,7 @@ public class GoogleImageProvider implements ImageProvider {
 
         int diversityStates = 0;
         for (int i = DIVERSITY_KEYWORDS_MIN; i <= DIVERSITY_KEYWORDS_MAX; i++) {
-            diversityStates += CombinatoricsUtils.binomialCoefficient(DIVERSITY_KEYWORDS.size(), i);
+            diversityStates += CombinatoricsUtils.binomialCoefficient(diversityKeywords.size(), i);
         }
 
         pages *= diversityStates;
@@ -80,17 +79,17 @@ public class GoogleImageProvider implements ImageProvider {
     private String buildRandomUrl() throws UnsupportedEncodingException {
         int offset = randomItem(OFFSETS);
         List<String> keywords = new ArrayList<String>();
-        keywords.add(randomItem(MANDATORY_KEYWORDS));
+        keywords.add(randomItem(mandatoryKeywords));
         for (List<String> classifierKeywords : CLASSIFIERS.values()) {
             if (random.nextDouble() > 0.8) {
                 keywords.add(randomItem(classifierKeywords));
             }
         }
-        int diversityKeywords = DIVERSITY_KEYWORDS_MIN;
+        int diversityKeywordsNum = DIVERSITY_KEYWORDS_MIN;
         if (random.nextDouble() > 0.5) {
-            diversityKeywords += random.nextInt(DIVERSITY_KEYWORDS_MAX + 1);
+            diversityKeywordsNum += random.nextInt(DIVERSITY_KEYWORDS_MAX + 1);
         }
-        keywords.addAll(randomSubList(DIVERSITY_KEYWORDS, diversityKeywords));
+        keywords.addAll(randomSubList(this.diversityKeywords, diversityKeywordsNum));
         keywords.add(KEYWORD_SUFFIX);
         String query = StringUtils.join(keywords, " ");
         query = URLEncoder.encode(query, "UTF-8");
