@@ -34,7 +34,6 @@ public class GoogleImageProvider implements ImageProvider {
 
     private static final int DIVERSITY_KEYWORDS_MIN = 0;
     private static final int DIVERSITY_KEYWORDS_MAX = 1;
-    private static final String KEYWORD_SUFFIX = "girls wallpaper";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -46,6 +45,9 @@ public class GoogleImageProvider implements ImageProvider {
 
     @Value("#{'${application.search.diversity.keywords}'.split(',')}")
     private List<String> diversityKeywords;
+
+    @Value("${application.search.keyword.suffix}")
+    private String keywordSuffix;
 
 
     @PostConstruct
@@ -90,7 +92,7 @@ public class GoogleImageProvider implements ImageProvider {
             diversityKeywordsNum += random.nextInt(DIVERSITY_KEYWORDS_MAX + 1);
         }
         keywords.addAll(randomSubList(this.diversityKeywords, diversityKeywordsNum));
-        keywords.add(KEYWORD_SUFFIX);
+        keywords.add(keywordSuffix);
         String query = StringUtils.join(keywords, " ");
         query = URLEncoder.encode(query, "UTF-8");
         return String.format("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=off&imgsz=xxlarge&start=%d&rsz=%d&q=%s&nonce=%s",
